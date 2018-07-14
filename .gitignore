@@ -1,0 +1,7 @@
+*
+!.vimrc
+!.vim/
+!.vim/plugin/
+!.vim/plugin/*
+!.gitsubmodules
+!.gitignore
