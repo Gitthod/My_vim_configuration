@@ -1,11 +1,12 @@
 *
 !.vimrc
-!.vim/
-!.vim/pack/
-!.vim/pack/plugins/
-!.vim/pack/plugins/start/
-!.vim/pack/plugins/start/*
-!.vim/plugin/
-!.vim/plugin/*
 !.gitsubmodules
 !.gitignore
+# Due to a performance quirk unless we specifically unignore a directory git will
+# never look inside it again. Adding the / to the end is meant to make it match only
+# with a directory.
+!.vim/
+# The double asterisk can match anything, in contrast to the * which can't match /
+# The next line has to have 2 asterisks otherwise new directories can't be discovered
+# and need to be manually added.
+!.vim/**
