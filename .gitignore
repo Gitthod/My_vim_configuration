@@ -1,6 +1,10 @@
 *
 !.vimrc
 !.vim/
+!.vim/pack/
+!.vim/pack/plugins/
+!.vim/pack/plugins/start/
+!.vim/pack/plugins/start/*
 !.vim/plugin/
 !.vim/plugin/*
 !.gitsubmodules

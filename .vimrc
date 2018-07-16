@@ -11,10 +11,10 @@ augroup code_style
 	   " \ setlocal fileformat=unix
 augroup END
 
+syntax on
 set fileencoding=utf8
 set encoding=utf8
 set tabstop=4
-syntax on
 set number
 set nowrap
 set backspace=indent,eol,start
@@ -38,9 +38,10 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-nnoremap <C-n> :ALEGoToDefinition<CR>
-nnoremap <C-m> :ALEHover<CR>
-nnoremap <C-b> :ALEFindReferences<CR>
+"Ale shortcuts, <C-N> isn't used since i am using the tab completion plugin.
+nnoremap <C-N> :ALEGoToDefinition<CR>
+nnoremap <C-M> :ALEHover<CR>
+nnoremap <C-B> :ALEFindReferences<CR>
 
 "<silent> won't display the command to the command log, @/ is the search
 "register which we want to preserve because the s/... will change it. The nohl
@@ -48,9 +49,9 @@ nnoremap <C-b> :ALEFindReferences<CR>
 "unlet will free the temporary variable we used.
 nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
 
-"Prevent clipboard from being cleared on vim's exit"
-"This command calls the external commands through system and basicall
-"does echo <regs contents> | xclip -selection clipboard"
+"Prevent clipboard from being cleared on vim's exit
+"This command calls the external commands through system and basically
+"does echo <regs contents> | xclip -selection clipboard
 augroup copy_pase
 	autocmd!
 	autocmd VimLeave * call system('echo ' . shellescape(getreg('+')) .
@@ -74,7 +75,7 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_completion_enabled = 1
 let g:ale_completion_delay = 50
 
-"Show whitespace
+"Show trailing whitespaces
 augroup trailing_whitespace
 autocmd!
 highlight ExtraWhitespace ctermbg=red guibg=red
