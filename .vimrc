@@ -32,6 +32,7 @@ set background=dark
 "Clear highlighting in normal mode, and clear the command from the log"
 nnoremap <space> : noh<CR><esc>:<backspace>
 map <F4> : NERDTreeToggle<CR>
+nmap <silent> <F8> :TlistToggle<CR>
 tmap <F6> <C-\><C-n>
 "split navigations
 nnoremap <C-J> <C-W><C-J>
