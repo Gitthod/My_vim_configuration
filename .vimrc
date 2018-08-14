@@ -58,17 +58,10 @@ augroup copy_pase
 	autocmd VimLeave * call system('echo ' . shellescape(getreg('+')) .
 			\ ' | xclip -selection clipboard')
 augroup END
-" These options might not be better than the default
-if &diff
-	set cursorline
-	hi DiffAdd    ctermfg=233 ctermbg=LightGreen guifg=#003300 guibg=#DDFFDD gui=none cterm=none
-	hi DiffChange ctermbg=white  guibg=#ececec gui=none   cterm=none
-	hi DiffText   ctermfg=233  ctermbg=yellow  guifg=#000033 guibg=#DDDDFF gui=none cterm=none
-endif
 " Ale configuration. be careful to not have code in the ftp plugin folder
 " because it can override some configuration done here
 let g:ale_linters = {'python': ['flake8', 'pyls']}
-let g:ale_linters['c'] = ['cppcheck', 'flawfinder', 'gcc']
+let g:ale_linters['c'] = ['cppcheck', 'flawfinder', 'gcc','clang','cquery']
 let g:ale_linters['vim'] = ['vint']
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
@@ -86,3 +79,19 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 augroup END
+
+function! UpdatePyPaths()
+	let package_paths = split(globpath('.','**/site-packages'))
+	for path in package_paths
+		let  $PYTHONPATH .= ':'.fnamemodify(path, ':p')
+	endfor
+	"$PYTHONPATH can only be a string so another variable needs to be used to carry list operations
+	let py_paths = split($PYTHONPATH, ':')
+	let py_paths = join(uniq(sort(py_paths)), ':')
+	let $PYTHONPATH = py_paths
+endfunction
+
+if !exists("mpy_path_loaded")
+	let mpy_path_loaded = 1
+	call UpdatePyPaths()
+endif
