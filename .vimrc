@@ -25,7 +25,7 @@ set nostartofline "don't go to the start of line when switching buffers
 set hlsearch
 set wildmenu
 set hidden
-set clipboard=unnamedplus
+set clipboard=unnamed
 set ruler
 set background=dark
 
@@ -81,7 +81,7 @@ autocmd BufWinLeave * call clearmatches()
 augroup END
 
 function! UpdatePyPaths()
-	let package_paths = split(globpath('.','**/site-packages'))
+	let package_paths = split(globpath('.','*env/**/site-packages'))
 	for path in package_paths
 		let  $PYTHONPATH .= ':'.fnamemodify(path, ':p')
 	endfor
@@ -91,7 +91,16 @@ function! UpdatePyPaths()
 	let $PYTHONPATH = py_paths
 endfunction
 
-if !exists("mpy_path_loaded")
+if argc() == 0 && !exists("mpy_path_loaded")
 	let mpy_path_loaded = 1
 	call UpdatePyPaths()
 endif
+
+"This works for Bash on Windows
+let s:clip = '/mnt/c/Windows/System32/clip.exe'  " default location
+if executable(s:clip)
+    augroup WSLYank
+        autocmd!
+        autocmd TextYankPost * call system('echo '.shellescape(join(v:event.regcontents, "\<CR>")).' | '.s:clip)
+    augroup END
+end
