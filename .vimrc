@@ -4,8 +4,8 @@
 augroup code_style
 	"clear the group's autocommands to avoid duplication if .vimrc is source more than once
 	autocmd!
-	au BufNewFile,BufRead *.py,*.c,*.h,*.cpp
-		\ setlocal textwidth=199|
+	au BufNewFile,BufRead *.c,*.h,*.cpp
+		\ setlocal textwidth=120|
 		\ setlocal expandtab|
 		\ setlocal autoindent
 	   " \ setlocal fileformat=unix
@@ -30,7 +30,7 @@ set ruler
 set background=dark
 
 "Clear highlighting in normal mode, and clear the command from the log"
-nnoremap <space> : noh<CR><esc>:<backspace>
+nnoremap <space> :noh<CR>:<backspace>
 map <F4> : NERDTreeToggle<CR>
 nmap <silent> <F8> :TlistToggle<CR>
 tmap <F6> <C-\><C-n>
@@ -49,6 +49,8 @@ nnoremap <C-B> :ALEFindReferences<CR>
 "directive will turn off highliting for the current search (i removed it)
 "unlet will free the temporary variable we used.
 nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+"Check for lines with a length longer than 120 and highlight them.
+nnoremap <silent> <F10> /\%>120v.\+<CR>
 
 "Prevent clipboard from being cleared on vim's exit
 "This command calls the external commands through system and basically
@@ -66,7 +68,7 @@ let g:ale_linters['vim'] = ['vint']
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_completion_enabled = 1
+let g:ale_completion_enabled = 0
 let g:ale_completion_delay = 50
 
 "Show trailing whitespaces
