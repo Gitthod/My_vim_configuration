@@ -1,0 +1,50 @@
+Learning and setting up vim can be a lengthy process. By using git submodules in combination with
+vim packages you can clone my whole configuration including all the vim plugins that i use, with one
+command.
+
+type : git clone --recurse-submodules git@github.com:Gitthod/My_vim_configuration.git
+
+This will clone my .vimrc file alongside the .vim folder. The --recurse-submodules is needed so each
+plugin that i use is cloned inside  $(git_root)/.vim/pack/plugins/start/$(plugin_name) If you have
+higher than 2.8 version of git you can add -j8 option to clone in parallel.
+
+If you don't use this command and you just type :
+
+git clone git@github.com:Gitthod/My_vim_configuration.git
+
+You need to step inside My_vim_configuration folder and type:
+
+	git submodule init git submodule update
+
+To clone all the submodules.
+
+After you clone everything just copy or link (with ln -s (folder | filename) ) the .vim folder and
+.vimrc file in your $(home) folder.
+
+You can examine my .vimrc to see in more detail what i use. But in summary :
+
+<F4> : is mapped to toggle NerdTREE
+<F8> : triggers Tlist which shows function names , var names and macros for c.
+<F6> : can be used when we are in terminal mode and we want to change to normal mode.
+
+Also i have remapped ctrl-n, ctrl-m, and ctrl-b to be used with ALE to find definitions of
+functions, refernces or small descriptions. However you will need to install some Language
+Server Protocol to use these mappings.
+
+All the plugins that are commited as submodules are independent and you can find more information in
+their official sites. The github links for these submodules can be found below:
+
+https://github.com/scrooloose/nerdtree   (File System Explorer for vim)
+
+https://github.com/w0rp/ale              (Asynchronous linting/fixing for Vim and Language
+   										  Server Protocol (LSP) integration)
+
+https://github.com/vim-airline/vim-airline       (Lean & mean status/tabline for vim that's
+												  light as air.)
+
+https://github.com/tpope/vim-fugitive (Git wrapper for vim)
+
+https://github.com/ervandew/supertab   (Use tab for autompletion)
+
+https://github.com/tpope/vim-surround (The plugin provides mappings to easily delete, change
+										and add surroundings symbols like [, ")
