@@ -4,7 +4,7 @@
 augroup code_style
 	"clear the group's autocommands to avoid duplication if .vimrc is source more than once
 	autocmd!
-	au BufNewFile,BufRead *.c,*.h,*.cpp
+	au BufNewFile,BufRead *.py,*.c,*.h,*.cpp
 		\ setlocal textwidth=120|
 		\ setlocal expandtab|
 		\ setlocal autoindent
