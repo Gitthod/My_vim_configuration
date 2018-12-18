@@ -52,6 +52,12 @@ nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :noh
 "Check for lines with a length longer than 120 and highlight them.
 nnoremap <silent> <F10> /\%>120v.\+<CR>
 
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
 "Prevent clipboard from being cleared on vim's exit
 "This command calls the external commands through system and basically
 "does echo <regs contents> | xclip -selection clipboard
@@ -106,3 +112,8 @@ if executable(s:clip)
         autocmd TextYankPost * call system('echo '.shellescape(join(v:event.regcontents, "\<CR>")).' | '.s:clip)
     augroup END
 end
+
+"MACROS"
+"Single quotations do not allow escaping so " need to be used to properly use \<esc>
+let @t="$50i \<esc>d50|"
+

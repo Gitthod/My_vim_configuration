@@ -16,3 +16,6 @@
 [submodule ".vim/pack/plugins/start/supertab"]
 	path = .vim/pack/plugins/start/supertab
 	url = git@github.com:ervandew/supertab.git
+[submodule ".vim/pack/plugins/start/easy_align"]
+	path = .vim/pack/plugins/start/easy_align
+	url = git@github.com:junegunn/vim-easy-align.git
