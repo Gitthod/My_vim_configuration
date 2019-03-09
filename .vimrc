@@ -1,14 +1,17 @@
-"Don't put spaces around the commas, a space between the arguments is needed
-"even with \ , the | operator is needed to chain commands. It is possible to
-"do it without the set but it looks better this way.
+"Don't put spaces around the commas. However a space between the arguments is NEEDED
+"\<Space> is required. The | operator is needed to chain commands.
+"It is possible to do it without the multiple set but it looks better this way.
 augroup code_style
-	"clear the group's autocommands to avoid duplication if .vimrc is source more than once
-	autocmd!
-	au BufNewFile,BufRead *.py,*.c,*.h,*.cpp
-		\ setlocal textwidth=120|
-		\ setlocal expandtab|
-		\ setlocal autoindent
-	   " \ setlocal fileformat=unix
+    "clear the group's autocommands to avoid duplication if .vimrc is sourced more than once
+    autocmd!
+
+    au FileType c,python
+        \ setlocal textwidth=120|
+        \ setlocal autoindent|
+       " \ setlocal fileformat=unix
+
+    au FileType make
+      \ setlocal noexpandtab
 augroup END
 
 syntax on
@@ -24,10 +27,26 @@ set cmdheight=2
 set nostartofline "don't go to the start of line when switching buffers
 set hlsearch
 set wildmenu
+" Under default settings, making changes and then opening a new file will display:
+" E37: No write since last change (add ! to override)
+" set hidden will change this behaviour.
 set hidden
-set clipboard=unnamed
-set ruler
+" Portray a tab as a ° followed by the required number of ° (a different character could have been used)
+" until the next tabstop.
+set list listchars=tab:°°
+" Default value of tab policy is to use space only
+set expandtab
+
+" Showd number of lines selected in visual mode, or size of block
+set showcmd
 set background=dark
+
+if has('unnamedplus')
+    set clipboard=unnamedplus
+else
+    set clipboard=unnamed
+endif
+
 
 "Clear highlighting in normal mode, and clear the command from the log"
 nnoremap <space> :noh<CR>:<backspace>
@@ -62,10 +81,11 @@ nmap ga <Plug>(EasyAlign)
 "This command calls the external commands through system and basically
 "does echo <regs contents> | xclip -selection clipboard
 augroup copy_pase
-	autocmd!
-	autocmd VimLeave * call system('echo ' . shellescape(getreg('+')) .
-			\ ' | xclip -selection clipboard')
+    autocmd!
+    autocmd VimLeave * call system('echo ' . shellescape(getreg('+')) .
+            \ ' | xclip -selection clipboard')
 augroup END
+
 " Ale configuration. be careful to not have code in the ftp plugin folder
 " because it can override some configuration done here
 let g:ale_linters = {'python': ['flake8', 'pyls']}
@@ -79,29 +99,30 @@ let g:ale_completion_delay = 50
 
 "Show trailing whitespaces
 augroup trailing_whitespace
-autocmd!
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
+    autocmd!
+    highlight ExtraWhitespace ctermbg=red guibg=red
+    match ExtraWhitespace /\s\+$/
+    autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+    autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+    autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+    autocmd BufWinLeave * call clearmatches()
 augroup END
 
 function! UpdatePyPaths()
-	let package_paths = split(globpath('.','*env/**/site-packages'))
-	for path in package_paths
-		let  $PYTHONPATH .= ':'.fnamemodify(path, ':p')
-	endfor
-	"$PYTHONPATH can only be a string so another variable needs to be used to carry list operations
-	let py_paths = split($PYTHONPATH, ':')
-	let py_paths = join(uniq(sort(py_paths)), ':')
-	let $PYTHONPATH = py_paths
+    let package_paths = split(globpath('.','*env/**/site-packages'))
+    for path in package_paths
+        let  $PYTHONPATH .= ':'.fnamemodify(path, ':p')
+    endfor
+
+    "$PYTHONPATH can only be a string so another variable needs to be used to carry list operations
+    let py_paths = split($PYTHONPATH, ':')
+    let py_paths = join(uniq(sort(py_paths)), ':')
+    let $PYTHONPATH = py_paths
 endfunction
 
 if argc() == 0 && !exists("mpy_path_loaded")
-	let mpy_path_loaded = 1
-	call UpdatePyPaths()
+    let mpy_path_loaded = 1
+    call UpdatePyPaths()
 endif
 
 "This works for Bash on Windows
@@ -116,4 +137,3 @@ end
 "MACROS"
 "Single quotations do not allow escaping so " need to be used to properly use \<esc>
 let @t="$50i \<esc>d50|"
-
