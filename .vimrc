@@ -7,7 +7,7 @@ augroup code_style
 
     au FileType c,python
         \ setlocal textwidth=120|
-        \ setlocal autoindent|
+        \ setlocal autoindent
        " \ setlocal fileformat=unix
 
     au FileType make
@@ -50,7 +50,7 @@ endif
 
 "Clear highlighting in normal mode, and clear the command from the log"
 nnoremap <space> :noh<CR>:<backspace>
-map <F4> : NERDTreeToggle<CR>
+nnoremap <F4> : NERDTreeToggle<CR>
 nmap <silent> <F8> :TlistToggle<CR>
 tmap <F6> <C-\><C-n>
 "split navigations
@@ -59,8 +59,13 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 "Ale shortcuts, <C-N> isn't used since i am using the tab completion plugin.
+
+" nmap must be used with the named plugs like <Plug>(ale_hover)
+" nnoremap doesn't work because since it will not remap <Plug>(ale_hover) to the actual command.
 nnoremap <C-N> :ALEGoToDefinition<CR>
-nnoremap <C-M> :ALEHover<CR>
+" <C-M> is for vim the same as <CR> so i should avoid using it.
+" verbose  nmap <CR> can check where the <CR> was remapped for normal mode.
+nnoremap K :ALEHover<CR>
 nnoremap <C-B> :ALEFindReferences<CR>
 
 "<silent> won't display the command to the command log, @/ is the search
