@@ -27,6 +27,8 @@ set cmdheight=2
 set nostartofline "don't go to the start of line when switching buffers
 set hlsearch
 set wildmenu
+" Get confirmation for 1 or 2 lines yanked/deleted (default is 2)
+set report=0
 " Under default settings, making changes and then opening a new file will display:
 " E37: No write since last change (add ! to override)
 " set hidden will change this behaviour.
@@ -50,7 +52,8 @@ endif
 
 "Clear highlighting in normal mode, and clear the command from the log"
 nnoremap <space> :noh<CR>:<backspace>
-nnoremap <F4> : NERDTreeToggle<CR>
+nnoremap <F4> :NERDTreeToggle<CR>
+nnoremap <F3> :ALEToggle<CR>
 nmap <silent> <F8> :TlistToggle<CR>
 tmap <F6> <C-\><C-n>
 "split navigations
@@ -101,6 +104,7 @@ let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_completion_enabled = 0
 let g:ale_completion_delay = 50
+let g:ale_enabled = 0
 
 "Show trailing whitespaces
 augroup trailing_whitespace
