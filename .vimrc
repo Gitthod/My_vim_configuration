@@ -38,6 +38,10 @@ set hidden
 set list listchars=tab:°°
 " Default value of tab policy is to use space only
 set expandtab
+" The alternative is to copy the fzf.vim file inside /.fzf/plugin to .vim/plugin
+" However this approach allows the versioning of the file to stay independent.
+" The following line implies fzf is cloned to ~/.fzf
+set rtp+=~/.fzf
 
 " Showd number of lines selected in visual mode, or size of block
 set showcmd
