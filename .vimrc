@@ -133,6 +133,33 @@ function! UpdatePyPaths()
     let $PYTHONPATH = py_paths
 endfunction
 
+"The following command expects two arguments to forward to QfixGrep().
+nnoremap <F2> :MyGrep<space>
+command! -nargs=* MyGrep call QfixGrep(<f-args>)
+
+"These variables denote the default options for grep.
+let g:grep_args="-rin"
+let g:grep_dir="."
+let g:grep_exdir=".git"
+
+"NOTE: Adding items to the quickfix list takes time so the following function shouldn't be used for commands that return
+"thousands of results.
+function! QfixGrep(regexp, inc)
+    "Set the highlight group for the results of grep.
+    highlight Grepper ctermbg=blue
+    let l:command="grep ".g:grep_args." ".a:regexp." --include=".a:inc." --exclude-dir=".g:grep_exdir." ".g:grep_dir
+    echo l:command
+
+    "Populate the quickfix list with the results of <command>.
+    cexpr system(command)
+
+    "Open the quickfix list.
+    copen
+
+    "Match the argument passed so it can be highlighted.
+    execute "mat Grepper /\\c".a:regexp."/"
+endfunction
+
 if argc() == 0 && !exists("mpy_path_loaded")
     let mpy_path_loaded = 1
     call UpdatePyPaths()
