@@ -47,6 +47,11 @@ set rtp+=~/.fzf
 set showcmd
 set background=dark
 
+filetype indent on
+
+set cinkeys-=0#
+set indentkeys-=0#
+
 if has('unnamedplus')
     set clipboard=unnamedplus
 else
@@ -85,7 +90,6 @@ nnoremap <silent> <F10> /\%>120v.\+<CR>
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
-
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
@@ -177,3 +181,33 @@ end
 "MACROS"
 "Single quotations do not allow escaping so " need to be used to properly use \<esc>
 let @t="$50i \<esc>d50|"
+
+
+"The following code provides a way to toggle automatic closing of the selected characters.
+nnoremap <F9> :ToggleCloseBrackets<CR>
+command! -nargs=0 ToggleCloseBrackets call MirrorMirror()
+
+let g:MirrorState = 0
+function! MirrorMirror()
+    if g:MirrorState == 0
+        echo "Automatic closing is ENABLED"
+        let g:MirrorState = 1
+        inoremap " ""<left>
+        inoremap ' ''<left>
+        inoremap ( ()<left>
+        inoremap [ []<left>
+        inoremap { {}<left>
+        "inoremap {<CR> {<CR>}<ESC>O
+        "inoremap {;<CR> {<CR>};<ESC>O
+    else
+        let g:MirrorState = 0
+        echo "Automatic closing is DISABLED"
+        iunmap "
+        iunmap '
+        iunmap (
+        iunmap [
+        iunmap {
+       "iunmap {<CR>
+       "iunmap {;<CR>
+    endif
+endfunction
