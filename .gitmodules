@@ -22,3 +22,6 @@
 [submodule ".vim/pack/plugins/start/fzf"]
 	path = .vim/pack/plugins/start/fzf
 	url = git@github.com:junegunn/fzf.vim.git
+[submodule ".vim/pack/plugins/start/GITNERD"]
+	path = .vim/pack/plugins/start/GITNERD
+	url = git@github.com:Xuyuanp/nerdtree-git-plugin.git
