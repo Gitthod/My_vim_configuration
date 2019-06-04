@@ -58,10 +58,13 @@ else
     set clipboard=unnamed
 endif
 
+set diffopt+=vertical
+
 
 "Clear highlighting in normal mode, and clear the command from the log"
 nnoremap <space> :noh<CR>:<backspace>
 nnoremap <F4> :NERDTreeToggle<CR>
+nnoremap ,.   :NERDTreeFind<CR>
 nnoremap <F3> :ALEToggle<CR>
 nmap <silent> <F8> :TlistToggle<CR>
 tmap <F6> <C-\><C-n>
@@ -88,6 +91,10 @@ nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :noh
 "Check for lines with a length longer than 120 and highlight them.
 nnoremap <silent> <F10> /\%>120v.\+<CR>
 
+"The following command will execute tag <filename> where file name is name under cursor <cfile>
+"ctags has to be run like following ctags --extra=+f -R .   //--extra=+f keeps tags for files
+nnoremap <silent>,] :execute "tag ".expand("<cfile>") <CR>
+
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
@@ -96,7 +103,7 @@ nmap ga <Plug>(EasyAlign)
 "Prevent clipboard from being cleared on vim's exit
 "This command calls the external commands through system and basically
 "does echo <regs contents> | xclip -selection clipboard
-augroup copy_pase
+augroup copy_paste
     autocmd!
     autocmd VimLeave * call system('echo ' . shellescape(getreg('+')) .
             \ ' | xclip -selection clipboard')
@@ -211,3 +218,22 @@ function! MirrorMirror()
        "iunmap {;<CR>
     endif
 endfunction
+
+"The following command expects two arguments to forward to QfixGrep().
+nnoremap ,d  :UnCommentPattern<space>
+nnoremap ,c  :CommentPattern<space>
+command! -nargs=1 UnCommentPattern call UnCommentPattern(<f-args>)
+command! -nargs=1 CommentPattern call CommentPattern(<f-args>)
+
+function! CommentPattern(pattern)
+    execute "g/".a:pattern."/norm 0i//"
+endfunction
+
+function! UnCommentPattern(pattern)
+    execute "g/".a:pattern."/norm 0xx"
+endfunction
+
+
+"<tab> will not act as a wildchar inside a macro hence it needs to be defined as wildcharm(wcm)
+set wcm=<tab>
+nnoremap ,1   :Files <tab>
