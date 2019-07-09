@@ -40,10 +40,10 @@ set list listchars=tab:°°
 set expandtab
 " The alternative is to copy the fzf.vim file inside /.fzf/plugin to .vim/plugin
 " However this approach allows the versioning of the file to stay independent.
-" The following line implies fzf is cloned to ~/.fzf
+" The following line implies fzf is cloned to ~/.fzf .
 set rtp+=~/.fzf
 
-" Showd number of lines selected in visual mode, or size of block
+" Show number of lines selected in visual mode, or size of block.
 set showcmd
 set background=dark
 
@@ -60,6 +60,10 @@ endif
 
 set diffopt+=vertical
 
+if &diff
+    " This makes works better with WSL bash.
+    colorscheme blue
+endif
 
 "Clear highlighting in normal mode, and clear the command from the log"
 nnoremap <space> :noh<CR>:<backspace>
