@@ -208,8 +208,6 @@ function! MirrorMirror()
         inoremap ( ()<left>
         inoremap [ []<left>
         inoremap { {}<left>
-        "inoremap {<CR> {<CR>}<ESC>O
-        "inoremap {;<CR> {<CR>};<ESC>O
     else
         let g:MirrorState = 0
         echo "Automatic closing is DISABLED"
@@ -218,8 +216,6 @@ function! MirrorMirror()
         iunmap (
         iunmap [
         iunmap {
-       "iunmap {<CR>
-       "iunmap {;<CR>
     endif
 endfunction
 
@@ -237,6 +233,8 @@ function! UnCommentPattern(pattern)
     execute "g/".a:pattern."/norm 0xx"
 endfunction
 
+" Toggle spell checking
+nnoremap  <C-A> :set spell!<CR>
 
 "<tab> will not act as a wildchar inside a macro hence it needs to be defined as wildcharm(wcm)
 set wcm=<tab>
