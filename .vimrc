@@ -59,6 +59,7 @@ else
 endif
 
 set diffopt+=vertical
+set errorformat+=%f
 
 if &diff
     " This makes works better with WSL bash.
@@ -69,7 +70,7 @@ endif
 nnoremap <space> :noh<CR>:<backspace>
 nnoremap <F4> :NERDTreeToggle<CR>
 nnoremap ,.   :NERDTreeFind<CR>
-nnoremap <F3> :ALEToggle<CR>
+nnoremap <F3> :call MyFind()<CR>
 nmap <silent> <F8> :TlistToggle<CR>
 tmap <F6> <C-\><C-n>
 "split navigations
@@ -92,11 +93,11 @@ nnoremap <C-B> :ALEFindReferences<CR>
 "directive will turn off highliting for the current search (i removed it)
 "unlet will free the temporary variable we used.
 nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
-"Check for lines with a length longer than 120 and highlight them.
+" Check for lines with a length longer than 120 and highlight them.
 nnoremap <silent> <F10> /\%>120v.\+<CR>
 
-"The following command will execute tag <filename> where file name is name under cursor <cfile>
-"ctags has to be run like following ctags --extra=+f -R .   //--extra=+f keeps tags for files
+" The following command will execute tag <filename> where file name is name under cursor <cfile>
+" ctags has to be run like following ctags --extra=+f -R .   //--extra=+f keeps tags for files
 nnoremap <silent>,] :execute "tag ".expand("<cfile>") <CR>
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -165,7 +166,7 @@ function! QfixGrep(regexp, inc)
     let l:command="grep ".g:grep_args." ".a:regexp." --include=".a:inc." --exclude-dir=".g:grep_exdir." ".g:grep_dir
     echo l:command
 
-    "Populate the quickfix list with the results of <command>.
+    "Populate the quickfix list with the results of <command> and jump on the first result.
     cexpr system(command)
 
     "Open the quickfix list.
@@ -219,7 +220,7 @@ function! MirrorMirror()
     endif
 endfunction
 
-"The following command expects two arguments to forward to QfixGrep().
+"The following commands the pattern to comment or uncomment in C
 nnoremap ,d  :UnCommentPattern<space>
 nnoremap ,c  :CommentPattern<space>
 command! -nargs=1 UnCommentPattern call UnCommentPattern(<f-args>)
@@ -239,3 +240,15 @@ nnoremap  <C-A> :set spell!<CR>
 "<tab> will not act as a wildchar inside a macro hence it needs to be defined as wildcharm(wcm)
 set wcm=<tab>
 nnoremap ,1   :Files <tab>
+command! -complete=file -nargs=1 Rpdf :r !pdftotext -nopgbrk <q-args> -
+
+"find files and populate the quickfix list
+fun! MyFind()
+    let s:fn = expand("<cfile>:t")
+    let l:command="find . -path  '*test*' -prune -o -name ". s:fn." -print"
+    echo l:command
+
+    "Populate the quickfix list with the results of <command> but don't jump on the first result.
+    silent cgetexpr system(command)
+    copen
+endfun

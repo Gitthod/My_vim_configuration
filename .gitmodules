@@ -25,3 +25,9 @@
 [submodule ".vim/pack/plugins/start/GITNERD"]
 	path = .vim/pack/plugins/start/GITNERD
 	url = git@github.com:Xuyuanp/nerdtree-git-plugin.git
+[submodule ".vim/.vim/pack/plugins/start/DirDiff"]
+	path = .vim/.vim/pack/plugins/start/DirDiff
+	url = git@github.com:will133/vim-dirdiff.git
+[submodule ".vim/pack/plugins/start/DirDiff"]
+	path = .vim/pack/plugins/start/DirDiff
+	url = git@github.com:will133/vim-dirdiff.git
