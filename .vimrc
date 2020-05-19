@@ -5,10 +5,15 @@ augroup code_style
     "clear the group's autocommands to avoid duplication if .vimrc is sourced more than once
     autocmd!
 
-    au FileType c,python
+    au FileType c
         \ setlocal textwidth=120|
         \ setlocal autoindent
        " \ setlocal fileformat=unix
+
+    au FileType python
+       \  setlocal textwidth=120|
+       \  setlocal autoindent|
+       \  setlocal equalprg=autopep8\ -
 
     au FileType make
       \ setlocal noexpandtab
@@ -117,7 +122,7 @@ augroup END
 " Ale configuration. be careful to not have code in the ftp plugin folder
 " because it can override some configuration done here
 let g:ale_linters = {'python': ['flake8', 'pyls']}
-let g:ale_linters['c'] = ['cppcheck', 'flawfinder', 'gcc','clang','cquery']
+let g:ale_linters['c'] = ['ccls']
 let g:ale_linters['vim'] = ['vint']
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
