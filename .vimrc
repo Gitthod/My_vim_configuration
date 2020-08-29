@@ -83,6 +83,7 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+nnoremap ,p :set paste!<CR>
 "Ale shortcuts, <C-N> isn't used since i am using the tab completion plugin.
 
 " nmap must be used with the named plugs like <Plug>(ale_hover)
