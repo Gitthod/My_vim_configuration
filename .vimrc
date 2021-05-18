@@ -32,6 +32,7 @@ set cmdheight=2
 set nostartofline "don't go to the start of line when switching buffers
 set hlsearch
 set wildmenu
+set diffopt+=iwhite "Ignore whitespaces when using vim in diff mode
 " Get confirmation for 1 or 2 lines yanked/deleted (default is 2)
 set report=0
 " Under default settings, making changes and then opening a new file will display:
