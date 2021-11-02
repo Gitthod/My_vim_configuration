@@ -259,3 +259,28 @@ fun! MyFind()
     silent cgetexpr system(command)
     copen
 endfun
+
+" Call Tree Hierarcy using CCTree
+
+nnoremap ,f  :call TraceForward() <CR>
+nnoremap ,r  :call TraceReverse() <CR>
+
+let g:cctreeDbLoaded = "False"
+
+fun! TraceForward()
+    if g:cctreeDbLoaded == "False"
+        execute "CCTreeLoadDB cscope.out"
+        let g:cctreeDbLoaded = "True"
+    endif
+
+    execute "CCTreeTraceForward ".expand("<cword>")
+endfun
+
+fun! TraceReverse()
+    if g:cctreeDbLoaded == "False"
+        execute "CCTreeLoadDB cscope.out"
+        let g:cctreeDbLoaded = "True"
+    endif
+
+    execute "CCTreeTraceReverse ".expand("<cword>")
+endfun
