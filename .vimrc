@@ -7,17 +7,33 @@ augroup code_style
 
     au FileType c
         \ setlocal textwidth=120|
-        \ setlocal autoindent
+        \ setlocal autoindent|
+        \ let b:headerIdentifier="include"
+       " \ setlocal fileformat=unix
+
+    au FileType cpp
+        \ setlocal textwidth=120|
+        \ setlocal autoindent|
+        \ let b:headerIdentifier="include"
        " \ setlocal fileformat=unix
 
     au FileType python
        \  setlocal textwidth=120|
        \  setlocal autoindent|
-       \  setlocal equalprg=autopep8\ -
+       \  setlocal equalprg=autopep8\ -|
+       \ let b:headerIdentifier="import"
 
     au FileType make
       \ setlocal noexpandtab
 augroup END
+
+"augroup MyYCMCustom
+"  autocmd!
+"  autocmd FileType c,cpp let b:ycm_hover = {
+"    \ 'command': 'GetDoc',
+"    \ 'syntax': &filetype
+"    \ }
+"augroup END
 
 syntax on
 set fileencoding=utf8
@@ -89,11 +105,12 @@ nnoremap ,p :set paste!<CR>
 
 " nmap must be used with the named plugs like <Plug>(ale_hover)
 " nnoremap doesn't work because since it will not remap <Plug>(ale_hover) to the actual command.
-nnoremap <C-N> :ALEGoToDefinition<CR>
+"nnoremap <C-N> :YcmCompleter GoToDefinition<CR>
 " <C-M> is for vim the same as <CR> so i should avoid using it.
 " verbose  nmap <CR> can check where the <CR> was remapped for normal mode.
-nnoremap K :ALEHover<CR>
-nnoremap <C-B> :ALEFindReferences<CR>
+"nnoremap K :YcmCompleter GetType<CR>
+nmap K <plug>(YCMHover)
+"nnoremap <C-B> :ALEFindReferences<CR>
 
 "<silent> won't display the command to the command log, @/ is the search
 "register which we want to preserve because the s/... will change it. The nohl
@@ -102,6 +119,12 @@ nnoremap <C-B> :ALEFindReferences<CR>
 nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
 " Check for lines with a length longer than 120 and highlight them.
 nnoremap <silent> <F10> /\%>120v.\+<CR>
+
+" Open file under cursor in new tab
+nnoremap gf <C-W>gf
+nnoremap gF <C-W>gF
+
+nnoremap <C-Z> <C-W>z
 
 " The following command will execute tag <filename> where file name is name under cursor <cfile>
 " ctags has to be run like following ctags --extra=+f -R .   //--extra=+f keeps tags for files
@@ -123,15 +146,15 @@ augroup END
 
 " Ale configuration. be careful to not have code in the ftp plugin folder
 " because it can override some configuration done here
-let g:ale_linters = {'python': ['flake8', 'pyls']}
-let g:ale_linters['c'] = ['ccls']
-let g:ale_linters['vim'] = ['vint']
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_completion_enabled = 0
-let g:ale_completion_delay = 50
-let g:ale_enabled = 0
+"let g:ale_linters = {'python': ['flake8', 'pyls']}
+"let g:ale_linters['c'] = ['ccls']
+"let g:ale_linters['vim'] = ['vint']
+"let g:ale_echo_msg_error_str = 'E'
+"let g:ale_echo_msg_warning_str = 'W'
+"let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+"let g:ale_completion_enabled = 0
+"let g:ale_completion_delay = 50
+"let g:ale_enabled = 0
 
 "Show trailing whitespaces
 augroup trailing_whitespace
@@ -162,15 +185,17 @@ command! -nargs=* MyGrep call QfixGrep(<f-args>)
 
 "These variables denote the default options for grep.
 let g:grep_args="-rin"
-let g:grep_dir="."
-let g:grep_exdir=".git"
+let g:grep_exdir="{.git,.ccls-cache,cscope.out}"   "Don't add space between the excluded directories
+let g:grep_inc_dir="."
 
 "NOTE: Adding items to the quickfix list takes time so the following function shouldn't be used for commands that return
 "thousands of results.
-function! QfixGrep(regexp, inc)
+function! QfixGrep(regexp, inc, ...)
     "Set the highlight group for the results of grep.
     highlight Grepper ctermbg=blue
-    let l:command="grep ".g:grep_args." ".a:regexp." --include=".a:inc." --exclude-dir=".g:grep_exdir." ".g:grep_dir
+    "Get the first optional argument returning cwd (.) if it's not present
+    let l:inc_dir = get(a: ,1 , g:grep_inc_dir)
+    let l:command="grep ".g:grep_args." ".a:regexp." --include=".a:inc." --exclude-dir=".g:grep_exdir." ".l:inc_dir
     echo l:command
 
     "Populate the quickfix list with the results of <command> and jump on the first result.
@@ -260,7 +285,26 @@ fun! MyFind()
     copen
 endfun
 
+nnoremap <F3> :call Integrate()<CR>
+
+fun! Integrate()
+    let l:cword =expand("<cword>")
+    echo system("cscope -d -f/home/theo/codename/cscope.out -R -L1 $(echo " .l:cword." | grep -oP \"(?<=__Macro__)\\w+?(?=__)\")")
+endfun
+
+fun! MyDef()
+    let l:curLine = getline('.')
+    if l:curLine =~? '.*'.b:headerIdentifier.'.*'
+        execute "YcmCompleter GoToInclude"
+    else
+        execute "YcmCompleter GoToDefinition"
+    endif
+endfun
+
 " Call Tree Hierarcy using CCTree
+
+nnoremap ,f  :call TraceForward() <CR>
+nnoremap <C-N> :call MyDef()<CR>
 
 nnoremap ,f  :call TraceForward() <CR>
 nnoremap ,r  :call TraceReverse() <CR>
@@ -284,3 +328,10 @@ fun! TraceReverse()
 
     execute "CCTreeTraceReverse ".expand("<cword>")
 endfun
+
+" fugitive-gitlab plugin
+let g:fugitive_gitlab_domains = ['https://gitlab-pos.u-blox.net/']
+let g:ycm_clangd_args=['-index']
+
+" Clang Complete
+" let g:clang_library_path="/usr/lib/llvm-10/lib/libclang-10.so.1"

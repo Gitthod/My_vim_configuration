@@ -31,3 +31,6 @@
 [submodule ".vim/pack/plugins/start/DirDiff"]
 	path = .vim/pack/plugins/start/DirDiff
 	url = git@github.com:will133/vim-dirdiff.git
+[submodule ".vim/pack/plugins/start/YouCompleteMe"]
+	path = .vim/pack/plugins/start/YouCompleteMe
+	url = https://github.com/ycm-core/YouCompleteMe.git
