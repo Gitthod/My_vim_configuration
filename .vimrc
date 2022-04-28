@@ -48,7 +48,7 @@ set cmdheight=2
 set nostartofline "don't go to the start of line when switching buffers
 set hlsearch
 set wildmenu
-set diffopt+=iwhite "Ignore whitespaces when using vim in diff mode
+"set diffopt+=iwhite "Ignore whitespaces when using vim in diff mode
 " Get confirmation for 1 or 2 lines yanked/deleted (default is 2)
 set report=0
 " Under default settings, making changes and then opening a new file will display:
@@ -92,7 +92,7 @@ endif
 nnoremap <space> :noh<CR>:<backspace>
 nnoremap <F4> :NERDTreeToggle<CR>
 nnoremap ,.   :NERDTreeFind<CR>
-nnoremap <F3> :call MyFind()<CR>
+"nnoremap <F3> :call MyFind()<CR>
 nmap <silent> <F8> :TlistToggle<CR>
 tmap <F6> <C-\><C-n>
 "split navigations
@@ -285,8 +285,9 @@ fun! MyFind()
     copen
 endfun
 
-nnoremap <F3> :call Integrate()<CR>
+command! -nargs=1 MDiff  call DiffWithMergeBase(<f-args>)
 
+nnoremap <F3> :call Integrate()<CR>
 fun! Integrate()
     let l:cword =expand("<cword>")
     echo system("cscope -d -f/home/theo/codename/cscope.out -R -L1 $(echo " .l:cword." | grep -oP \"(?<=__Macro__)\\w+?(?=__)\")")
@@ -327,6 +328,14 @@ fun! TraceReverse()
     endif
 
     execute "CCTreeTraceReverse ".expand("<cword>")
+endfun
+
+fun! DiffWithMergeBase(mergeToBranch)
+    let l:fileName=expand("<cfile>")
+    let l:pref=system("git merge-base HEAD ".a:mergeToBranch)
+    execute "echo ".l:pref
+"   execute "vs ".l:pref."_".l:fileName
+"   execute 'r !git show $(git merge-base HEAD '.a:mergeToBranch.'):'.l:fileName
 endfun
 
 " fugitive-gitlab plugin
