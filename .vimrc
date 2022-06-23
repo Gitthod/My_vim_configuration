@@ -110,7 +110,7 @@ nnoremap ,p :set paste!<CR>
 " verbose  nmap <CR> can check where the <CR> was remapped for normal mode.
 "nnoremap K :YcmCompleter GetType<CR>
 nmap K <plug>(YCMHover)
-"nnoremap <C-B> :ALEFindReferences<CR>
+nnoremap <C-B> :YcmCompleter GoToReferences<CR>
 
 "<silent> won't display the command to the command log, @/ is the search
 "register which we want to preserve because the s/... will change it. The nohl
