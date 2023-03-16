@@ -83,6 +83,14 @@ endif
 set diffopt+=vertical
 set errorformat+=%f
 
+" Type :h highlight-groups to see all available groups and change colors accordingly
+" Change the highlight background from YCM linter warnings
+hi SpellCap ctermbg=17
+" Change the highlight for bad spelling errors
+hi SpellBad ctermbg=52
+" Change the background color of different lines
+hi DiffText ctermbg=52
+
 if &diff
     " This makes works better with WSL bash.
     colorscheme blue
@@ -306,6 +314,8 @@ fun! Integrate()
     echo system("cscope -d -f/home/theo/codename/cscope.out -R -L1 $(echo " .l:cword." | grep -oP \"(?<=__Macro__)\\w+?(?=__)\")")
 endfun
 
+" Setting auto hover to an empty string disables the definition automatic popup (after a short delay).
+let g:ycm_auto_hover = ""
 fun! MyDef()
     let l:curLine = getline('.')
     if l:curLine =~? '.*'.b:headerIdentifier.'.*'
