@@ -367,3 +367,33 @@ let g:ycm_clangd_args=['-index']
 
 " Clang Complete
 " let g:clang_library_path="/usr/lib/llvm-10/lib/libclang-10.so.1"
+
+" vim-bookmarks plugin
+
+" Create different bookmark file per git project
+let g:bookmark_save_per_working_dir = 1
+let g:bookmark_auto_save = 1
+
+" This function is needed to automatically detect the root git directory and
+" create a file named .vim-bookmarks to store there the bookmarks
+" Finds the Git super-project directory.
+function! g:BMWorkDirFileLocation()
+    let filename = '.vim-bookmarks'
+    let current_filedir = expand('%:p:h')
+    let location = ''
+    let tmp_dir = current_filedir
+    if !isdirectory(current_filedir.'/.git')
+        " Change to the parent directory
+        let tmp_dir = fnamemodify(tmp_dir, ':h')
+        while  !isdirectory(tmp_dir.'/.git') && tmp_dir != '/'
+            let tmp_dir = fnamemodify(tmp_dir, ':h')
+        endwhile
+        if tmp_dir == '/'
+            " Incase of a mistake just create a temporary file
+            return '/tmp/'.filename
+        endif
+        return tmp_dir.'/'.filename
+    endif
+
+    return current_filedir.'/'.filename
+endfunction

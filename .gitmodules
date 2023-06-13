@@ -34,3 +34,6 @@
 [submodule ".vim/pack/plugins/start/YouCompleteMe"]
 	path = .vim/pack/plugins/start/YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe.git
+[submodule ".vim/pack/plugins/start/vim-bookmarks"]
+	path = .vim/pack/plugins/start/vim-bookmarks
+	url = https://github.com/MattesGroeger/vim-bookmarks.git
